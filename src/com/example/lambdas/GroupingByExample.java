@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GroupingByExample {
@@ -11,6 +12,8 @@ public class GroupingByExample {
 	private static final Long hotterThreshold = new Long(1);
 	private static final Long colderThreshold = new Long(1);
 
+	private static final String[] list = {"hotter", "colder"}; 
+	
 	public static void main(String[] args) {
 		
 		List<EventData> allEvents = initializeData();
@@ -32,13 +35,21 @@ public class GroupingByExample {
 			    .collect(
 			        Collectors.groupingBy(EventData::getThingId, Collectors.groupingBy(EventData::getEventName, Collectors.counting())));
 			        		
-			        				
+		
+		printAllEvents(allEvents);
+		
+		System.out.println("===========================================================");
 		printResults1(eventsByThings);
 		
 		
 		
 		
 		
+	}
+
+	private static void printAllEvents(List<EventData> allEvents) {
+		for(EventData event : allEvents)
+			System.out.println("ThingId:  " + event.getThingId() + "  ====" + " EventName:" + event.getEventName());
 	}
 
 	private static void printResults1(Map<String, Map<String, Long>> eventsByThings) {
@@ -101,7 +112,18 @@ public class GroupingByExample {
 
 	private static List<EventData> initializeData() {
 		List<EventData> events = new ArrayList<EventData>();
-		events.add(new EventData("1", "hotter"));
+		
+		
+		
+		int randomNumber = getRandomNumber(30, 1);
+		for(int i = 0; i< randomNumber; i++) {
+			EventData event = createRandomEvent();
+			events.add(event);
+			
+		}
+		
+		
+		/*events.add(new EventData("1", "hotter"));
 		events.add(new EventData("1", "colder"));
 		events.add(new EventData("1", "colder"));
 		events.add(new EventData("2", "hotter"));
@@ -114,7 +136,26 @@ public class GroupingByExample {
 		events.add(new EventData("4", "hotter"));
 		events.add(new EventData("4", "colder"));
 		events.add(new EventData("5", "hotter"));
-		
+		*/
 		return events;
+	}
+
+	private static EventData createRandomEvent() {
+		
+		Random r= new Random();
+
+		int thingId = getRandomNumber(10, 1);
+		
+		String eventName = list[r.nextInt(list.length)];
+		
+		return new EventData(Integer.toString(thingId), eventName);
+		
+		
+	}
+
+	private static int getRandomNumber(int max, int min) {
+		Random random= new Random();
+		int thingId = random.nextInt(max - min + 1) + min;
+		return thingId;
 	}
 }
