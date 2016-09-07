@@ -4,12 +4,16 @@ import java.time.LocalTime;
 
 public class Session {
 	
-	private LocalTime startTime = LocalTime.of(9, 0);
-	private LocalTime endTime = LocalTime.of(12, 0);
+	private LocalTime startTime;
+	private LocalTime endTime;
 	
-	public Session(LocalTime startTime, LocalTime endTime) {
+	private LocalTime maxiumumCutOffTime;
+	
+	public Session(LocalTime startTime, LocalTime endTime, LocalTime maxiumumCutOffTime) {
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.maxiumumCutOffTime= maxiumumCutOffTime;
+		
 	}
 	public LocalTime getStartTime() {
 		return startTime;
@@ -23,5 +27,12 @@ public class Session {
 	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
+	public LocalTime getMaxiumumCutOffTime() {
+		return maxiumumCutOffTime;
+	}
+	public void setMaxiumumCutOffTime(LocalTime maxiumumCutOffTime) {
+		this.maxiumumCutOffTime = maxiumumCutOffTime;
+	}
+	
 
 }
