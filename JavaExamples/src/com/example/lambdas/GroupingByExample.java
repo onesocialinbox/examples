@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Splitter;
+
 public class GroupingByExample {
 
 	private static final Long hotterThreshold = new Long(3);
@@ -24,7 +26,8 @@ public class GroupingByExample {
 		Map<String, Map<String,Long>> eventsByThings = allEvents
 			    .stream()
 			    .collect(
-			        Collectors.groupingBy(EventData::getThingId, Collectors.groupingBy(EventData::getEventName, Collectors.counting())));
+			        Collectors.groupingBy(EventData::getThingId, 
+			        		Collectors.groupingBy(EventData::getEventName, Collectors.counting())));
 			        		
 		
 		printAllEvents(allEvents);
@@ -66,8 +69,18 @@ public class GroupingByExample {
 	}
 	
 	private static void readConfig(Map<String, Map<String, Long>> eventsByThings) {
+		//String config = "7:4,8:5,9&10:6";
 		String config = "1&2:1,3&4:2,5&6:3,7:4,8:5,9&10:6";
 		String[] pairSplit = StringUtils.split(config, ",");
+		
+		final String stringToSplit = "1&2:1,3&4:2,5&6:3,7:4,8:5,9&10:6";
+
+		final Map<String, String> splitKeyValues = Splitter.on(",")
+		        .omitEmptyStrings()
+		        .trimResults()
+		        .withKeyValueSeparator(":")
+		        .split(stringToSplit);
+		
 		
 		for(String pair : pairSplit){
 			String[] xdkFanSplit = StringUtils.split(pair, ":");
@@ -103,7 +116,7 @@ public class GroupingByExample {
 	private static List<EventData> initializeData() {
 		List<EventData> events = new ArrayList<EventData>();
 		
-		int randomNumber = getRandomNumber(30, 1);
+		int randomNumber = getRandomNumber(50, 1);
 		for(int i = 0; i< randomNumber; i++) {
 			EventData event = createRandomEvent();
 			events.add(event);
@@ -116,7 +129,7 @@ public class GroupingByExample {
 		
 		Random r= new Random();
 
-		int thingId = getRandomNumber(5, 1);
+		int thingId = getRandomNumber(10, 1);
 		
 		String eventName = list[r.nextInt(list.length)];
 		
